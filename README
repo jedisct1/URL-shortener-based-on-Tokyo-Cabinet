@@ -8,7 +8,7 @@ Requirements:
 - Oklahoma Mixer
 - Rack Cache and Rack CSRF
 
-Change the secret key in app/squeezer.rb and there you go.
+Change the secret key and the domain name in app/squeezer.rb and there you go.
 
 
 

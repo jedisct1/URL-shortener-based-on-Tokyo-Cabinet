@@ -11,6 +11,7 @@ require "rack/csrf"
 require "rack/cache"
 
 KEY = "insert a secret key here"
+DOMAIN = "sk.tl"
 
 set :port, 4568
 set :sessions, true
@@ -45,26 +46,26 @@ post "/" do
   uri = uri.gsub(%r(//+), "/").sub("/", "//")
   if uri.empty?
     status 406
-    return "Il manque l'URI..."
+    return "Missing URI"
   end
   uri = "http://#{uri}" unless /^(http|https|ftp|ftps):\/\/.+\./i.match(uri)
   begin
     puri = URI::parse(uri)
   rescue URI::InvalidURIError
     status 400
-    return "URI qui n'en est pas vraiment une"
+    return "Mmmm... doesn't look like a valid URI..."
   end
   puri.scheme = puri.scheme.downcase
   puri.host = puri.host.downcase
   puri.path = "" if puri.path == "/"
-  if puri.host == "sk.tl"
+  if puri.host == DOMAIN
     status 406
-    return "On bouclerait, ce serait ballot"
+    return "No need to shorten myself"
   end
   uri = puri.to_s
   sid = Base64::encode64(Digest::MD5.digest(KEY + uri)).tr("+/=", "-. ")[0..5].strip
   tc { |db| db[sid] = uri }
-  @newuri = "http://sk.tl/#{sid}"
+  @newuri = "http://#{DOMAIN}/#{sid}"
   haml :newuri_show
 end
 
@@ -72,13 +73,13 @@ get "/:sid" do
   sid = params[:sid].strip
   if sid.empty?
     status 406
-    return "Il manque un identifiant"
+    return "Missing identifier"
   end
   uri = nil
   tc { |db| uri = db[sid] }
   if uri.nil?
     status 404
-    return "Introuvable"
+    return "Not found"
   end
   redirect uri
 end

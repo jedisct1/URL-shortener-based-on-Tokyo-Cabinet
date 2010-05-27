@@ -1,8 +1,8 @@
-%h1 Entrez une URI a raboter :
+%h1 Enter an URI to shorten:
 %form{:action => "/", :method => "post"}
   %div
     %input{:type => "text", :name => "uri", :id => "uri", :maxlength => 500,
            :autocomplete => "off"}
     = Rack::Csrf.csrf_tag(env)
 #poweredby
-  Puissant et vrombissant stockage : Tokyo Cabinet.
+  Powered by a roaring storage engine: Tokyo Cabinet.
