@@ -1,0 +1,6 @@
+%h1 URI courte :
+%form{:action => "javascript:void(0)", :method => "get"}
+  %input{:type => "text", :readonly => "readonly", :id => "newuri",
+         :value => @newuri, :onclick => "this.select(); return false"}
+#back         
+  %a{:href => "/"} Retour

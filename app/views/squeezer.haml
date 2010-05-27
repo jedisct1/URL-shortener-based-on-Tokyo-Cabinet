@@ -1,0 +1,8 @@
+%h1 Entrez une URI a raboter :
+%form{:action => "/", :method => "post"}
+  %div
+    %input{:type => "text", :name => "uri", :id => "uri", :maxlength => 500,
+           :autocomplete => "off"}
+    = Rack::Csrf.csrf_tag(env)
+#poweredby
+  Puissant et vrombissant stockage : Tokyo Cabinet.
