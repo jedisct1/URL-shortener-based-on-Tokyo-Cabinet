@@ -1,0 +1,15 @@
+
+An URL shortener, based on Tokyo Cabinet.
+
+Requirements:
+
+- Sinatra
+- HAML & SASS
+- Oklahoma Mixer
+- Rack Cache and Rack CSRF
+
+Change the secret key in app/squeezer.rb and there you go.
+
+
+
+-Frank Denis <j (at) pureftpd (dot) org>.
