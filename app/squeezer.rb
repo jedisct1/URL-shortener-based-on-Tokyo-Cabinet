@@ -34,12 +34,13 @@ end
 
 get "/" do
   expires 3600, :private
+  response["X-Content-Security-Policy"] = "allow 'self'"
   haml :squeezer
 end
 
 post "/" do
   expires 3600, :private
-  response["X-Content-Security-Policy"] = "allow self"
+  response["X-Content-Security-Policy"] = "allow 'self'"
   uri = params[:uri] || ""
   uri.strip!
   uri = uri.gsub(%r(//+), "/").sub("/", "//")
@@ -68,7 +69,8 @@ post "/" do
   haml :newuri_show
 end
 
-get "/:sid" do  
+get "/:sid" do
+  response["X-Content-Security-Policy"] = "allow 'self'"  
   sid = params[:sid].strip
   if sid.empty?
     status 406
