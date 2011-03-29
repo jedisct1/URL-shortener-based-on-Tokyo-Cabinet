@@ -1,8 +1,8 @@
 %h1 Enter an URI to shorten:
 %form{:action => "/", :method => "post"}
   %div
-    %input{:type => "text", :name => "uri", :id => "uri", :maxlength => 500,
-           :autocomplete => "off"}
+    %input{:type => "url", :name => "uri", :id => "uri", :maxlength => 500,
+           :autocomplete => "off", :autofocus => true, :required => true}
     = Rack::Csrf.csrf_tag(env)
 #poweredby
   Powered by a roaring storage engine: Tokyo Cabinet.
