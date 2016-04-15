@@ -67,7 +67,7 @@ post "/" do
   uri = puri.to_s
   sid = Base58::encode(OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new("sha512"), KEY, uri)[0..10].to_i(16))
   tc { |db| db[sid] = uri }
-  @newuri = "http://#{DOMAIN}/#{sid}"
+  @newuri = "https://#{DOMAIN}/#{sid}"
   haml :newuri_show
 end
 
