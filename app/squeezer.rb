@@ -2,8 +2,8 @@ require "rubygems"
 require "sinatra"
 require "haml"
 require "sass"
-require "digest/md5"
-require "base64"
+require "openssl"
+require "base58"
 require "uri"
 require "oklahoma_mixer"
 require "rack/csrf"
@@ -63,7 +63,7 @@ post "/" do
     return "No need to shorten myself"
   end
   uri = puri.to_s
-  sid = Base64::encode64(Digest::MD5.digest(KEY + uri)).tr("+/=", "-. ")[0..5].strip
+  sid = Base58::encode(OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new("sha512"), KEY, uri)[0..10].to_i(16))
   tc { |db| db[sid] = uri }
   @newuri = "http://#{DOMAIN}/#{sid}"
   haml :newuri_show

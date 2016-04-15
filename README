@@ -7,6 +7,7 @@ Requirements:
 - HAML & SASS
 - Oklahoma Mixer
 - Rack Cache and Rack CSRF
+- Base58
 
 Change the secret key and the domain name in app/squeezer.rb and there you go.
 
