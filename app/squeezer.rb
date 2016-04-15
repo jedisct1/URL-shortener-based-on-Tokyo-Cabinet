@@ -12,6 +12,8 @@ require "rack/cache"
 KEY = "insert a secret key here"
 DOMAIN = "sk.tl"
 
+set :public_folder, File.dirname(__FILE__) + '/../public'
+set :views, File.dirname(__FILE__) + '/views'
 set :port, 4568
 set :sessions, true
 use Rack::Csrf, :raise => false
