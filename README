@@ -10,7 +10,3 @@ Requirements:
 - Base58
 
 Change the secret key and the domain name in app/squeezer.rb and there you go.
-
-
-
--Frank Denis <j (at) pureftpd (dot) org>.
