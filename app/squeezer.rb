@@ -5,9 +5,10 @@ require "sass"
 require "openssl"
 require "base58"
 require "uri"
-require "oklahoma_mixer"
 require "rack/csrf"
 require "rack/cache"
+require "tokyocabinet"
+include TokyoCabinet
 
 KEY = "insert a secret key here"
 DOMAIN = "sk.tl"
@@ -65,8 +66,27 @@ post "/" do
     return "No need to shorten myself"
   end
   uri = puri.to_s
-  sid = Base58::encode(OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new("sha512"), KEY, uri)[0..10].to_i(16))
-  tc { |db| db[sid] = uri }
+  sid = nil
+  tc do |db|
+    db.tranbegin
+    (0..100).each do |i|
+      k = i.chr + KEY
+      sid = Base58::encode(OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new("sha512"), k, uri)[0..10].to_i(16))
+      prev = db[sid]
+      if prev == nil
+        db[sid] = uri
+        break
+      elsif prev == uri
+        break
+      end
+      sid = nil
+    end
+    db.trancommit
+  end
+  unless sid
+    status 406
+    return "Too many collisions"
+  end
   @newuri = "https://#{DOMAIN}/#{sid}"
   haml :newuri_show
 end
@@ -88,5 +108,8 @@ get "/:sid" do
 end
 
 def tc(&block)
-  OKMixer.open("../data/squeezer.tch") { |db| yield db }
+  db = HDB::new
+  db.open("../data/squeezer.tch", HDB::OWRITER | HDB::OCREAT)
+  yield db
+  db.close
 end

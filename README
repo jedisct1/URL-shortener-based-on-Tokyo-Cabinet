@@ -5,7 +5,7 @@ Requirements:
 
 - Sinatra
 - HAML & SASS
-- Oklahoma Mixer
+- Tokyo Cabinet
 - Rack Cache and Rack CSRF
 - Base58
 
