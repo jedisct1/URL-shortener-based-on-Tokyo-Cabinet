@@ -1,0 +1,32 @@
+body {
+  background: white;
+  color: black;
+  font-family: courier;
+  font-size: 1.5em;
+  text-align: center; }
+
+form {
+  margin: 0; }
+
+input {
+  font-size: 1.5em;
+  width: 84%; }
+
+#newuri {
+  font-size: 2em;
+  font-weight: bold;
+  font-family: courier;
+  text-align: center;
+  border: 1px solid #444;
+  background: #eee; }
+
+#back {
+  margin-top: 3em;
+  margin-right: 1em;
+  text-align: right;
+  color: #888; }
+
+#poweredby {
+  margin-top: 8em;
+  color: #888;
+  font-size: 0.5em; }

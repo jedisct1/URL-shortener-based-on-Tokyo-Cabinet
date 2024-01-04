@@ -4,25 +4,29 @@ require "sass"
 require "openssl"
 require "base58"
 require "uri"
-require "rack/csrf"
 require "rack/cache"
+require "securerandom"
 require "tokyocabinet"
 include TokyoCabinet
 
-KEY = "insert a secret key here"
+require 'sass/plugin/rack'
+use Sass::Plugin::Rack
+
 DOMAIN = "sk.tl"
+KEY = "insert a secret key here"
 
 set :public_folder, File.dirname(__FILE__) + '/../public'
 set :views, File.dirname(__FILE__) + '/views'
 set :port, 4568
 set :sessions, true
-use Rack::Csrf, :raise => false
 
 use Rack::Cache do
   set :verbose, false
   set :metastore, "heap:/"
-  set :entitystore, "heap:/"  
+  set :entitystore, "heap:/"
 end
+
+set :haml, :format => :html5, :escape_html => false
 
 get "/favicon.ico" do
   expires 86400, :public
@@ -31,12 +35,13 @@ end
 get "/squeezer.css" do
   response["Content-Type"] = "text/css"
   expires 3600, :public
-  sass :squeezer
+  send_file File.join(settings.public_folder, 'stylesheet.css')
 end
 
 get "/" do
   expires 3600, :private
   response["X-Content-Security-Policy"] = "allow 'self'"
+  session[:csrf] = SecureRandom.base64(32);
   haml :squeezer
 end
 
@@ -91,7 +96,7 @@ post "/" do
 end
 
 get "/:sid" do
-  response["X-Content-Security-Policy"] = "allow 'self'"  
+  response["X-Content-Security-Policy"] = "allow 'self'"
   sid = params[:sid].strip
   if sid.empty?
     status 406
